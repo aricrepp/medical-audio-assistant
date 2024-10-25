@@ -1,0 +1,54 @@
+{
+  "what": {
+    "what is diabetes": "Diabetes is a chronic health condition that affects how your body turns food into energy. There are two main types: Type 1, where the body doesn't produce insulin, and Type 2, where the body doesn't use insulin properly. It's characterized by high blood sugar levels and requires ongoing management.",
+    "what is hypertension": "Hypertension, or high blood pressure, is a condition where the force of blood against artery walls is consistently too high. Normal blood pressure is below 120/80 mmHg. It often develops over years and can lead to serious health complications if untreated.",
+    "what causes inflammation": "Inflammation is the body's natural response to injury or infection. It can be triggered by various factors including injuries, infections, autoimmune disorders, or exposure to irritants. Acute inflammation is a short-term protective response, while chronic inflammation can contribute to various diseases.",
+    "what are common cold symptoms": "Common cold symptoms typically include nasal congestion, runny nose, sore throat, cough, mild body aches, mild fatigue, and sometimes a low-grade fever. Symptoms usually appear 1-3 days after exposure and can last 7-10 days."
+  },
+  "when": {
+    "when should I seek emergency care": "Seek immediate medical attention if you experience: severe chest pain, difficulty breathing, sudden confusion, severe abdominal pain, sudden severe headache, signs of stroke (face drooping, arm weakness, speech difficulty), or severe injuries.",
+    "when do vaccines need boosters": "Vaccine booster timing varies by type. Tetanus typically needs a booster every 10 years, flu shots annually, and COVID-19 boosters as recommended by current health guidelines. Childhood vaccines follow a specific schedule set by healthcare authorities."
+  },
+  "where": {
+    "where can I get vaccinated": "Vaccinations are available at various locations including primary care physician offices, pharmacies, public health clinics, and specialized immunization clinics. Many retailers with pharmacy services also offer vaccination services.",
+    "where does arthritis commonly occur": "Arthritis commonly occurs in joints including knees, hips, hands (particularly finger joints), spine, and ankles. The location can vary depending on the type of arthritis, with osteoarthritis typically affecting weight-bearing joints."
+  },
+  "who": {
+    "who is at risk for heart disease": "Risk factors for heart disease include people over 65, those with family history of heart disease, smokers, people with high blood pressure, high cholesterol, obesity, or diabetes. Men typically develop heart disease earlier than women.",
+    "who should get regular cancer screenings": "Cancer screening recommendations vary by age and risk factors. Generally, adults over 45 should get colorectal cancer screening, women over 40 should get mammograms, and adults with a history of smoking should get lung cancer screening."
+  },
+  "why": {
+    "why do we need sleep": "Sleep is essential for physical and mental health. During sleep, the body repairs tissues, strengthens the immune system, consolidates memories, and clears waste products from the brain. Chronic sleep deprivation can lead to serious health problems.",
+    "why do vaccines work": "Vaccines work by stimulating the immune system to recognize and fight specific pathogens. They contain weakened or killed pathogens, or parts of them, which trigger an immune response without causing disease, creating immunity for future exposures."
+  },
+  "how": {
+    "how does the immune system work": "The immune system protects the body through multiple layers of defense. It includes physical barriers like skin, cellular responses like white blood cells, and antibodies that target specific threats. It can remember past infections to respond more effectively to repeated exposures.",
+    "how to manage stress": "Stress management includes regular exercise, adequate sleep, deep breathing exercises, meditation, maintaining social connections, and setting realistic goals. Professional help may be needed for severe or chronic stress."
+  },
+  "which": {
+    "which foods are high in fiber": "High-fiber foods include whole grains (oats, quinoa, brown rice), legumes (beans, lentils), fruits (apples, pears, berries), vegetables (broccoli, carrots), and nuts/seeds. A high-fiber diet supports digestive health and helps maintain healthy blood sugar levels."
+  },
+  "can": {
+    "can stress cause physical symptoms": "Yes, stress can cause various physical symptoms including headaches, muscle tension, chest pain, fatigue, stomach upset, sleep problems, and changes in appetite. Chronic stress may contribute to more serious health conditions.",
+    "can exercise lower blood pressure": "Yes, regular physical activity can help lower blood pressure by strengthening the heart, reducing stress, and improving blood vessel function. Aim for at least 150 minutes of moderate aerobic activity or 75 minutes of vigorous activity weekly."
+  },
+  "should": {
+    "should I get a flu shot": "Yes, annual flu shots are recommended for most people 6 months and older. They're particularly important for young children, older adults, pregnant women, and people with chronic health conditions.",
+    "should I take antibiotics for a cold": "No, antibiotics should not be taken for common colds, which are caused by viruses. Antibiotics only work against bacterial infections. Taking antibiotics unnecessarily can lead to antibiotic resistance."
+  },
+  "is": {
+    "is depression treatable": "Yes, depression is highly treatable through various approaches including psychotherapy, medication, lifestyle changes, or a combination of these. Early intervention typically leads to better outcomes. Treatment plans are individualized based on severity and type of depression."
+  },
+  "are": {
+    "are vitamins necessary": "While a balanced diet should provide most necessary nutrients, some people may need vitamin supplements based on their diet, health conditions, age, or lifestyle. Consult a healthcare provider before starting any supplement regimen."
+  },
+  "do": {
+    "do I need an annual physical": "Regular check-ups are recommended for preventive care and early detection of health issues. Frequency depends on age, gender, and risk factors, but most adults should have basic health screenings at least every 1-3 years."
+  },
+  "does": {
+    "does family history affect health risks": "Yes, family history can significantly impact health risks for conditions like heart disease, diabetes, certain cancers, and mental health disorders. Knowing your family history helps healthcare providers assess risk and recommend appropriate screenings."
+  },
+  "will": {
+    "will exercise help arthritis": "Yes, appropriate exercise can help manage arthritis by strengthening muscles around joints, maintaining flexibility, and reducing pain. Low-impact activities like swimming, walking, and cycling are often recommended."
+  }
+}

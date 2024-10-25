@@ -1,0 +1,13 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.assistant-container {
+  position: absolute;
+  top: 2em;
+  left: 2em;
+  width: 50vw;
+}
