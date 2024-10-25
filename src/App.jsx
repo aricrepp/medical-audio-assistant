@@ -111,10 +111,8 @@ const AudioAssistant = () => {
   const findAnswer = (question) => {
     if (!knowledgeBase) return;
 
-    // Convert question to lowercase for matching
     const lowercaseQuestion = question.toLowerCase().trim();
 
-    // Find the question word that starts the question
     const questionWord = QUESTION_WORDS.find((word) =>
       lowercaseQuestion.startsWith(word + " ")
     );
@@ -123,10 +121,8 @@ const AudioAssistant = () => {
       return;
     }
 
-    // Get the questions for this question word
     const relevantQuestions = knowledgeBase[questionWord];
 
-    // Remove stop words and create word array for matching
     const words = lowercaseQuestion
       .split(" ")
       .filter((word) => !STOP_WORDS.includes(word));
@@ -134,13 +130,11 @@ const AudioAssistant = () => {
     let bestMatch = null;
     let maxMatchScore = 0;
 
-    // Compare with each question in the relevant category
     Object.entries(relevantQuestions).forEach(([dbQuestion, answer]) => {
       const dbWords = dbQuestion.toLowerCase().split(" ");
 
       const matchScore = words.reduce((score, word, index) => {
         if (dbWords.includes(word)) {
-          // Words appearing earlier get higher weight
           return score + 1 + (words.length - index) / words.length;
         }
         return score;
@@ -251,10 +245,6 @@ const AudioAssistant = () => {
         <h2>Current Answer:</h2>
         {questions.map((question, index) => (
           <div key={index}>
-            {/* <p>
-              <strong>Q: </strong>
-              {question}
-            </p> */}
             {suggestedAnswers[index] && (
               <p>
                 <strong>A: </strong>
