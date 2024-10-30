@@ -75,15 +75,13 @@ const AudioAssistant = () => {
   const [transcript, setTranscript] = useState("");
   const [questions, setQuestions] = useState([]);
   const [suggestedAnswers, setSuggestedAnswers] = useState([]);
-  const [knowledgeBase, setKnowledgeBase] = useState({});
+  const [, setKnowledgeBase] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const lastProcessedTextRef = useRef("");
   const loadedQuestionWords = useRef(new Set());
   const pendingQuestions = useRef([]);
   const [isAiLoading, setIsAiLoading] = useState(false);
-  const [isFetchingAnswer, setFetchingAnswer] = useState(false);
-  const knowledgeBaseRef = useRef({});
 
   const handleTranscriptUpdate = (transcriptText) => {
     setTranscript(transcriptText);
@@ -190,7 +188,6 @@ const AudioAssistant = () => {
 
     let bestMatch = null;
     let maxMatchScore = 0;
-    let bestMatchQuestion = null;
 
     Object.entries(relevantQuestions).forEach(([dbQuestion, answer]) => {
       console.log(dbQuestion);
@@ -206,12 +203,10 @@ const AudioAssistant = () => {
       if (matchScore > maxMatchScore) {
         maxMatchScore = matchScore;
         bestMatch = dbQuestion;
-        bestMatchQuestion = answer;
       }
     });
 
     if (bestMatch && maxMatchScore > 1) {
-      setFetchingAnswer(true);
       try {
         const aiAnswer = await fetchAnswerFromOpenAI(question);
 
@@ -223,7 +218,6 @@ const AudioAssistant = () => {
             confidence: maxMatchScore,
           },
         ]);
-        setFetchingAnswer(false);
       } catch (error) {
         console.error("Error fetching AI answer:", error);
       }
@@ -316,7 +310,7 @@ const AudioAssistant = () => {
 
       <div>
         <h2>Current Answer:</h2>
-        {isFetchingAnswer ? (
+        {isAiLoading ? (
           <div>Fetching Answer</div>
         ) : (
           suggestedAnswers.map((answer, index) => (
