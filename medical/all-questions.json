@@ -1,0 +1,121 @@
+{
+  "what": [
+    "What side effects should I expect from this medication?",
+    "What lifestyle changes do I need to make?",
+    "What caused my condition?",
+    "What tests will I need to undergo?",
+    "What are my treatment options?"
+  ],
+  "when": [
+    "When can I return to normal activities?",
+    "When should I schedule a follow-up appointment?",
+    "When will my test results be ready?",
+    "When should I take my medications?",
+    "When should I seek emergency care?"
+  ],
+  "where": [
+    "Where can I find more information about my condition?",
+    "Where should I store these medications?",
+    "Where can I get my prescriptions filled?",
+    "Where can I find support groups for my condition?",
+    "Where should I go for physical therapy?"
+  ],
+  "who": [
+    "Who should I contact in case of emergency?",
+    "Who will be performing my surgery?",
+    "Who can help me manage my condition at home?",
+    "Who should I inform about my medical condition?",
+    "Who can I talk to about my medical bills?"
+  ],
+  "why": [
+    "Why am I experiencing these symptoms?",
+    "Why do I need this specific treatment?",
+    "Why isn't my medication working as expected?",
+    "Why do I need so many different tests?",
+    "Why has my condition changed recently?"
+  ],
+  "how": [
+    "How will this treatment affect my daily life?",
+    "How can I manage my symptoms at home?",
+    "How long will my recovery take?",
+    "How will I know if the treatment is working?",
+    "How can I prevent this condition from getting worse?"
+  ],
+  "which": [
+    "Which activities should I avoid during recovery?",
+    "Which symptoms indicate an emergency?",
+    "Which specialists should I see for my condition?",
+    "Which medications can interact with my current prescriptions?",
+    "Which treatment option has the best success rate?"
+  ],
+  "can": [
+    "Can I drive while taking this medication?",
+    "Can I continue exercising with this condition?",
+    "Can I eat normally with this medication?",
+    "Can I get a second opinion?",
+    "Can this condition be cured completely?"
+  ],
+  "could": [
+    "Could my condition get worse?",
+    "Could my symptoms be related to something else?",
+    "Could I have prevented this condition?",
+    "Could this affect my ability to work?",
+    "Could my family members be at risk for this condition?"
+  ],
+  "would": [
+    "Would alternative treatments be effective?",
+    "Would changing my diet help my condition?",
+    "Would exercise improve my symptoms?",
+    "Would my insurance cover this treatment?",
+    "Would this treatment affect my other health conditions?"
+  ],
+  "should": [
+    "Should I get vaccinated with this condition?",
+    "Should I tell my employer about my condition?",
+    "Should I change my current medications?",
+    "Should I be worried about these symptoms?",
+    "Should I make changes to my diet?"
+  ],
+  "is": [
+    "Is this condition hereditary?",
+    "Is this treatment covered by my insurance?",
+    "Is there a generic version of this medication?",
+    "Is this pain normal during recovery?",
+    "Is my condition chronic or temporary?"
+  ],
+  "are": [
+    "Are there any alternative treatments available?",
+    "Are these side effects normal?",
+    "Are there support groups for people with my condition?",
+    "Are there lifestyle changes that could help?",
+    "Are my symptoms typical for this condition?"
+  ],
+  "do": [
+    "Do I need to take time off work?",
+    "Do I need to change my diet?",
+    "Do I need to avoid any specific activities?",
+    "Do I need regular check-ups?",
+    "Do I need to monitor any specific symptoms?"
+  ],
+  "does": [
+    "Does my family history affect my treatment options?",
+    "Does this medication interact with alcohol?",
+    "Does insurance cover this procedure?",
+    "Does this condition affect my life expectancy?",
+    "Does this treatment have long-term effects?"
+  ],
+  "did": [
+    "Did my lifestyle contribute to this condition?",
+    "Did the test results show anything concerning?",
+    "Did my previous treatments affect my current options?",
+    "Did my family history influence my diagnosis?",
+    "Did my symptoms indicate a serious condition?"
+  ],
+  "will": [
+    "Will I need long-term medication?",
+    "Will my condition improve with time?",
+    "Will I need surgery in the future?",
+    "Will this affect my daily activities?",
+    "Will I need special accommodations at work?"
+  ]
+}

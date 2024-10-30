@@ -2,19 +2,24 @@ import React, { useState, useEffect, useRef } from "react";
 import { initializeApp } from "firebase/app";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import axios from "axios";
+import OpenAI from "openai";
 import "./App.css";
 
 const firebaseConfig = {
-  apiKey: "",
-  authDomain: "",
-  projectId: "",
-  storageBucket: "",
-  messagingSenderId: "",
-  appId: "",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_APP_ID,
 };
 
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
+const openai = new OpenAI({
+  apiKey: import.meta.env.VITE_OPENAI_API_KEY,
+  dangerouslyAllowBrowser: true,
+});
 
 const QUESTION_WORDS = [
   "what",
@@ -70,58 +75,114 @@ const AudioAssistant = () => {
   const [transcript, setTranscript] = useState("");
   const [questions, setQuestions] = useState([]);
   const [suggestedAnswers, setSuggestedAnswers] = useState([]);
-  const [knowledgeBase, setKnowledgeBase] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [knowledgeBase, setKnowledgeBase] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const lastProcessedTextRef = useRef("");
+  const loadedQuestionWords = useRef(new Set());
+  const pendingQuestions = useRef([]);
+  const [isAiLoading, setIsAiLoading] = useState(false);
+  const [isFetchingAnswer, setFetchingAnswer] = useState(false);
+  const knowledgeBaseRef = useRef({});
 
   const handleTranscriptUpdate = (transcriptText) => {
     setTranscript(transcriptText);
-    extractAndProcessQuestions(transcriptText);
   };
 
   const recognitionRef = useSpeechRecognition(handleTranscriptUpdate);
 
-  useEffect(() => {
-    const fetchKnowledgeBase = async () => {
-      try {
-        const docRef = ref(storage, "medical-text.json");
-        const firebaseUrl = await getDownloadURL(docRef);
-        const urlObj = new URL(firebaseUrl);
-        const proxyUrl = `/firebase${urlObj.pathname}${urlObj.search}`;
+  const fetchAnswerFromOpenAI = async (question) => {
+    setIsAiLoading(true);
+    try {
+      const response = await openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are a helpful assistant providing clear, concise answers to medical questions.",
+          },
+          {
+            role: "user",
+            content: question,
+          },
+        ],
+        temperature: 0.7,
+        max_tokens: 2048,
+        top_p: 1,
+        frequency_penalty: 0,
+        presence_penalty: 0,
+        response_format: {
+          type: "text",
+        },
+      });
 
-        const response = await axios.get(proxyUrl);
-        if (!response.data) {
-          throw new Error("No data received");
-        }
-
-        setKnowledgeBase(response.data);
-        console.log("Knowledge base loaded successfully");
-      } catch (err) {
-        console.error("Error fetching knowledge base:", err);
-        setError("Failed to load knowledge base. Please try again later.");
-      } finally {
-        setIsLoading(false);
+      if (response.choices.length > 0) {
+        return response.choices[0].message.content;
+      } else {
+        console.error("OpenAI API response error:", response);
+        setError("Failed to get an AI answer. Please try again.");
+        return null;
       }
-    };
+    } catch (err) {
+      console.error("Error fetching answer from OpenAI:", err);
+      setError("Failed to get an AI answer. Please try again.");
+      return null;
+    } finally {
+      setIsAiLoading(false);
+    }
+  };
 
-    fetchKnowledgeBase();
-  }, []);
+  const fetchKnowledgeBaseForWord = async (questionWord) => {
+    if (loadedQuestionWords.current.has(questionWord)) {
+      return;
+    }
 
-  const findAnswer = (question) => {
-    if (!knowledgeBase) return;
+    setIsLoading(true);
+    try {
+      const docRef = ref(storage, `${questionWord}-medical-questions.json`);
+      const firebaseUrl = await getDownloadURL(docRef);
+      const urlObj = new URL(firebaseUrl);
+      const proxyUrl = `/firebase${urlObj.pathname}${urlObj.search}`;
+      const response = await axios.get(proxyUrl);
 
+      if (!response.data) {
+        throw new Error(`No data received for ${questionWord}`);
+      }
+
+      setKnowledgeBase((prevBase) => {
+        const newBase = {
+          ...prevBase,
+          [questionWord]: response.data[questionWord],
+        };
+        return newBase;
+      });
+
+      return response.data;
+    } catch (err) {
+      console.error(`Error fetching knowledge base for ${questionWord}:`, err);
+      setError(
+        `Failed to load knowledge base for "${questionWord}" questions. Please try again later.`
+      );
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const findAnswer = async (question) => {
     const lowercaseQuestion = question.toLowerCase().trim();
-
     const questionWord = QUESTION_WORDS.find((word) =>
       lowercaseQuestion.startsWith(word + " ")
     );
 
-    if (!questionWord || !knowledgeBase[questionWord]) {
+    if (!questionWord) {
       return;
     }
 
-    const relevantQuestions = knowledgeBase[questionWord];
+    const fetchKnowledge = await fetchKnowledgeBaseForWord(questionWord);
+
+    const relevantQuestions = fetchKnowledge[questionWord];
 
     const words = lowercaseQuestion
       .split(" ")
@@ -129,9 +190,11 @@ const AudioAssistant = () => {
 
     let bestMatch = null;
     let maxMatchScore = 0;
+    let bestMatchQuestion = null;
 
     Object.entries(relevantQuestions).forEach(([dbQuestion, answer]) => {
-      const dbWords = dbQuestion.toLowerCase().split(" ");
+      console.log(dbQuestion);
+      const dbWords = answer.toLowerCase().split(" ");
 
       const matchScore = words.reduce((score, word, index) => {
         if (dbWords.includes(word)) {
@@ -142,24 +205,34 @@ const AudioAssistant = () => {
 
       if (matchScore > maxMatchScore) {
         maxMatchScore = matchScore;
-        bestMatch = answer;
+        bestMatch = dbQuestion;
+        bestMatchQuestion = answer;
       }
     });
 
     if (bestMatch && maxMatchScore > 1) {
-      setSuggestedAnswers((prev) => [
-        ...prev,
-        {
-          question,
-          answer: bestMatch,
-          confidence: maxMatchScore,
-        },
-      ]);
+      setFetchingAnswer(true);
+      try {
+        const aiAnswer = await fetchAnswerFromOpenAI(question);
+
+        setSuggestedAnswers((prev) => [
+          ...prev,
+          {
+            question,
+            answer: aiAnswer,
+            confidence: maxMatchScore,
+          },
+        ]);
+        setFetchingAnswer(false);
+      } catch (error) {
+        console.error("Error fetching AI answer:", error);
+      }
+    } else {
+      console.log("No suitable match found");
     }
   };
 
   const extractAndProcessQuestions = (text) => {
-    if (!knowledgeBase) return;
     const resetTriggerWords = ["reset", "clear", "start over"];
     if (resetTriggerWords.some((substring) => text.includes(substring))) {
       stopRecording();
@@ -167,7 +240,6 @@ const AudioAssistant = () => {
       return;
     }
 
-    const newText = text.slice(lastProcessedTextRef.current.length);
     lastProcessedTextRef.current = text;
 
     const sentences = text.split(/[.!?]+/).filter(Boolean);
@@ -197,6 +269,8 @@ const AudioAssistant = () => {
       setSuggestedAnswers([]);
       lastProcessedTextRef.current = "";
       setTranscript("");
+      pendingQuestions.current = [];
+      setError(null);
     }
   };
 
@@ -204,6 +278,7 @@ const AudioAssistant = () => {
     if (recognitionRef.current) {
       recognitionRef.current.stop();
       setIsRecording(false);
+      extractAndProcessQuestions(transcript);
     }
   };
 
@@ -212,11 +287,9 @@ const AudioAssistant = () => {
     setSuggestedAnswers([]);
     lastProcessedTextRef.current = "";
     setTranscript("");
+    pendingQuestions.current = [];
+    setError(null);
   };
-
-  if (isLoading) {
-    return <div>Loading knowledge base...</div>;
-  }
 
   return (
     <div className="assistant-container">
@@ -227,11 +300,11 @@ const AudioAssistant = () => {
       <div>
         <button
           onClick={isRecording ? stopRecording : startRecording}
-          disabled={!knowledgeBase}
+          disabled={isLoading}
         >
           {isRecording ? "Stop Recording" : "Start Recording"}
         </button>
-        <button onClick={clearChat} disabled={!knowledgeBase}>
+        <button onClick={clearChat} disabled={isLoading}>
           Clear Chat
         </button>
       </div>
@@ -243,16 +316,22 @@ const AudioAssistant = () => {
 
       <div>
         <h2>Current Answer:</h2>
-        {questions.map((question, index) => (
-          <div key={index}>
-            {suggestedAnswers[index] && (
+        {isFetchingAnswer ? (
+          <div>Fetching Answer</div>
+        ) : (
+          suggestedAnswers.map((answer, index) => (
+            <div key={index}>
+              <p>
+                <strong>Q: </strong>
+                {answer.question}
+              </p>
               <p>
                 <strong>A: </strong>
-                {suggestedAnswers[index].answer}
+                {answer.answer}
               </p>
-            )}
-          </div>
-        ))}
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

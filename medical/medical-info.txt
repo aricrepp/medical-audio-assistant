@@ -1,0 +1,5 @@
+Medication: Metformin HCl (Glucophage)
+Strength: 500mg tablets
+Directions: Take 1 tablet by mouth twice daily with meals
+Quantity: 60 tablets
+Refills: 3
